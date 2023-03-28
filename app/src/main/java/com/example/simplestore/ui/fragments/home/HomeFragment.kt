@@ -5,13 +5,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import com.example.simplestore.R
 import com.example.simplestore.databinding.FragmentHomeBinding
-import com.example.simplestore.extensions.loadByCoil
 import com.example.simplestore.ui.fragments.base.BaseFragment
+import com.example.simplestore.ui.fragments.home.epoxy.controller.ProductEpoxyController
 import com.example.simplestore.ui.fragments.home.vm.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,6 +20,8 @@ class HomeFragment : BaseFragment() {
     private val binding by lazy { _binding!! }
 
     private val viewMode: HomeViewModel by viewModels()
+
+    private val productEpoxyController by lazy { ProductEpoxyController() }
 
     // endregion class leve variables
 
@@ -38,52 +37,29 @@ class HomeFragment : BaseFragment() {
     // region onCreateView
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initViews()
         setupObservers()
         setupClickListeners()
     }
 
+    private fun initViews() {
+        binding.epoxyRecyclerView.setController(productEpoxyController)
+    }
+
     private fun setupClickListeners() {
 
-        binding.apply {
 
-            cardView.setOnClickListener {
-                productDescriptionTextView.apply {
-                    isVisible = !isVisible
-                }
-            }
-
-            addToCartButton.setOnClickListener {
-                inCartView.apply {
-                    isVisible = !isVisible
-                }
-            }
-
-            var isFavorite = false
-            favoriteImageView.setOnClickListener {
-                val imageRes = if (isFavorite) {
-                    R.drawable.ic_round_favorite_border_24
-                } else {
-                    R.drawable.ic_round_favorite_24
-                }
-
-                favoriteImageView.setIconResource(imageRes)
-                isFavorite = !isFavorite
-            }
-        }
 
     }
     // endregion onViewCreated
 
     private fun setupObservers() {
+
         viewMode.characterByIdLiveData.observe(viewLifecycleOwner) {
             Log.e(TAG, "setupObservers: $it")
+            productEpoxyController.setData(it)
         }
 
-        binding.productImageViewLoadingProgressBar.isVisible = true
-        val imageUrl = "https://fakestoreapi.com/img/71YAIFU48IL._AC_UL640_QL65_ML3_.jpg"
-        binding.productImageView.loadByCoil(imageUrl) { request, result ->
-            binding.productImageViewLoadingProgressBar.isGone = true
-        }
 
     }
 

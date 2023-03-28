@@ -1,6 +1,6 @@
 package com.example.simplestore.network
 
-import com.example.simplestore.network.response.GetProductsResponse
+import com.example.simplestore.model.network.GetProductResponse
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -8,7 +8,7 @@ class ApiClient @Inject constructor(
     private val simpleStoreApi: SimpleStoreApi
 ) {
 
-    suspend fun productListPage(): SimpleResponse<GetProductsResponse> {
+    suspend fun productListPage(): SimpleResponse<List<GetProductResponse>> {
         return safeApiCall { simpleStoreApi.productList() }
     }
 
