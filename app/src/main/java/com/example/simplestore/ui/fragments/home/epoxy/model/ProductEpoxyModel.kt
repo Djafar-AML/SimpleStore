@@ -6,11 +6,11 @@ import com.example.simplestore.R
 import com.example.simplestore.databinding.EpoxyModelProductItemBinding
 import com.example.simplestore.epxoybinding.ViewBindingKotlinModel
 import com.example.simplestore.extensions.loadByCoil
-import com.example.simplestore.model.domain.Product
+import com.example.simplestore.model.ui.UiProduct
 import java.text.NumberFormat
 
 data class ProductEpoxyModel(
-    private val product: Product
+    private val uiProduct: UiProduct
 ) : ViewBindingKotlinModel<EpoxyModelProductItemBinding>(R.layout.epoxy_model_product_item) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance()
@@ -20,10 +20,10 @@ data class ProductEpoxyModel(
 
         setupClickListeners()
 
-        productTitleTextView.text = product.title
-        productCategoryTextView.text = product.category
-        productDescriptionTextView.text = product.description
-        productPriceTextView.text = currencyFormatter.format(product.price)
+        productTitleTextView.text = uiProduct.product.title
+        productCategoryTextView.text = uiProduct.product.category
+        productDescriptionTextView.text = uiProduct.product.description
+        productPriceTextView.text = currencyFormatter.format(uiProduct.product.price)
 
     }
 
@@ -31,7 +31,7 @@ data class ProductEpoxyModel(
 
         productImageViewLoadingProgressBar.isVisible = true
 
-        val imageUrl = product.imageUrl
+        val imageUrl = uiProduct.product.imageUrl
 
         productImageView.loadByCoil(imageUrl) { request, result ->
             productImageViewLoadingProgressBar.isGone = true
@@ -53,18 +53,15 @@ data class ProductEpoxyModel(
             }
         }
 
-        var isFavorite = false
-        favoriteImageView.setOnClickListener {
-            val imageRes = if (isFavorite) {
-                R.drawable.ic_round_favorite_border_24
-            } else {
-                R.drawable.ic_round_favorite_24
-            }
+        val isFavorite = uiProduct.isFavorite
 
-            favoriteImageView.setIconResource(imageRes)
-            isFavorite = !isFavorite
+        val imageRes = if (isFavorite) {
+            R.drawable.ic_round_favorite_24
+        } else {
+            R.drawable.ic_round_favorite_border_24
         }
 
+        favoriteImageView.setIconResource(imageRes)
     }
 
 }
