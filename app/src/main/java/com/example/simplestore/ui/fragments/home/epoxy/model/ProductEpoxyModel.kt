@@ -7,11 +7,13 @@ import com.example.simplestore.databinding.EpoxyModelProductItemBinding
 import com.example.simplestore.epxoybinding.ViewBindingKotlinModel
 import com.example.simplestore.extensions.loadByCoil
 import com.example.simplestore.model.domain.Product
+import java.text.NumberFormat
 
 data class ProductEpoxyModel(
     private val product: Product
 ) : ViewBindingKotlinModel<EpoxyModelProductItemBinding>(R.layout.epoxy_model_product_item) {
 
+    private val currencyFormatter = NumberFormat.getCurrencyInstance()
     override fun EpoxyModelProductItemBinding.bind() {
 
         loadImage()
@@ -21,8 +23,7 @@ data class ProductEpoxyModel(
         productTitleTextView.text = product.title
         productCategoryTextView.text = product.category
         productDescriptionTextView.text = product.description
-        productPriceTextView.text = String.format(product.price.toPlainString())
-
+        productPriceTextView.text = currencyFormatter.format(product.price)
 
     }
 

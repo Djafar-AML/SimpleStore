@@ -1,7 +1,6 @@
 package com.example.simplestore.ui.fragments.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,34 +33,30 @@ class HomeFragment : BaseFragment() {
     }
     //endregion onCreateView
 
-    // region onCreateView
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         setupObservers()
-        setupClickListeners()
+        initLoadingState()
     }
 
     private fun initViews() {
         binding.epoxyRecyclerView.setController(productEpoxyController)
     }
 
-    private fun setupClickListeners() {
-
-
-
-    }
-    // endregion onViewCreated
 
     private fun setupObservers() {
 
         viewMode.characterByIdLiveData.observe(viewLifecycleOwner) {
-            Log.e(TAG, "setupObservers: $it")
             productEpoxyController.setData(it)
         }
 
-
     }
+
+    private fun initLoadingState() {
+        productEpoxyController.setData(emptyList())
+    }
+
 
     // region onDestroyView
     override fun onDestroyView() {
