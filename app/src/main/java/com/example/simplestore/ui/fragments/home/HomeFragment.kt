@@ -47,7 +47,7 @@ class HomeFragment : BaseFragment() {
 
     private fun setupObservers() {
 
-        viewMode.characterByIdLiveData.observe(viewLifecycleOwner) {
+        viewMode.productListLiveData.observe(viewLifecycleOwner) {
             productEpoxyController.setData(it)
         }
 

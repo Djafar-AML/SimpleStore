@@ -9,11 +9,12 @@ class SharedRepo constructor(
     private val apiClient: ApiClient
 ) {
 
-    suspend fun productList(): List<Product?> {
+    suspend fun productList(): List<Product> {
 
         val response = apiClient.productListPage()
 
         if (response.failed || response.isSuccessful.not()) {
+            // todo handle error
             return emptyList()
         }
 
