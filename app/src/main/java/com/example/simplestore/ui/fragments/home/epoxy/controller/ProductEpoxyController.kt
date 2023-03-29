@@ -7,7 +7,8 @@ import com.example.simplestore.ui.fragments.home.epoxy.model.ProductEpoxyModel
 import java.util.*
 
 class ProductEpoxyController(
-    private val onFavoriteIconClick: (Int) -> Unit
+    private val onFavoriteIconClick: (Int) -> Unit,
+    private val onUiProductClick: (Int) -> Unit,
 ) : TypedEpoxyController<List<UiProduct?>>() {
 
     override fun buildModels(data: List<UiProduct?>?) {
@@ -18,7 +19,11 @@ class ProductEpoxyController(
         }
 
         data.forEach { uiProduct ->
-            ProductEpoxyModel(uiProduct!!, onFavoriteIconClick).id(uiProduct.product.id).addTo(this)
+            ProductEpoxyModel(
+                uiProduct!!,
+                onFavoriteIconClick,
+                onUiProductClick
+            ).id(uiProduct.product.id).addTo(this)
         }
 
     }

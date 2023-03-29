@@ -28,11 +28,16 @@ class HomeViewModel @Inject constructor(
 
         return combine(
             store.stateFlow.map { it.productList },
-            store.stateFlow.map { it.favoriteProductIds }
-        ) { listOfProducts, setOfFavoriteIds ->
+            store.stateFlow.map { it.favoriteProductIds },
+            store.stateFlow.map { it.isExpandedProductIds },
+        ) { listOfProducts, setOfFavoriteIds, setOfIsExpandedIds ->
 
             listOfProducts.map { product ->
-                UiProduct(product = product, isFavorite = setOfFavoriteIds.contains(product.id))
+                UiProduct(
+                    product = product,
+                    isFavorite = setOfFavoriteIds.contains(product.id),
+                    isExpanded = setOfIsExpandedIds.contains(product.id)
+                )
             }
         }.distinctUntilChanged().asLiveData()
 
@@ -80,6 +85,30 @@ class HomeViewModel @Inject constructor(
         }
 
         return state.copy(favoriteProductIds = newFavoriteIds)
+    }
+
+    fun updateIsExpanded(id: Int) {
+
+        viewModelScope.launch {
+            store.update { state ->
+                updateIsExpandedIdsState(state, id)
+            }
+        }
+
+    }
+
+    private fun updateIsExpandedIdsState(state: ApplicationState, id: Int): ApplicationState {
+
+        val currentIsExpandedIds = state.isExpandedProductIds
+
+        val newIsExpandedIds = if (currentIsExpandedIds.contains(id)) {
+            currentIsExpandedIds.filter { it != id }.toSet()
+        } else {
+            currentIsExpandedIds + setOf(id)
+        }
+
+        return state.copy(isExpandedProductIds = newIsExpandedIds)
+
     }
 
 }

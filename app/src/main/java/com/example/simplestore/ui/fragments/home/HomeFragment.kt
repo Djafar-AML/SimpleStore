@@ -20,7 +20,12 @@ class HomeFragment : BaseFragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
-    private val productEpoxyController by lazy { ProductEpoxyController(::onFavoriteIconClick) }
+    private val productEpoxyController by lazy {
+        ProductEpoxyController(
+            ::onFavoriteIconClick,
+            ::onUiProductClick
+        )
+    }
 
     // endregion class leve variables
 
@@ -58,6 +63,10 @@ class HomeFragment : BaseFragment() {
 
     private fun onFavoriteIconClick(id: Int) {
         viewModel.updateFavoriteIcon(id)
+    }
+
+    private fun onUiProductClick(id: Int) {
+        viewModel.updateIsExpanded(id)
     }
 
 

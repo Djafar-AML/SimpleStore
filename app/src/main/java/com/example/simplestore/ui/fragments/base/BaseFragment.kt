@@ -19,7 +19,6 @@ abstract class BaseFragment : Fragment() {
 
     protected val navController by lazy { storeActivity.navController }
 
-
     protected fun navigateUp() {
         storeActivity.navController.navigateUp()
     }

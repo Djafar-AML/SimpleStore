@@ -12,6 +12,7 @@ import java.text.NumberFormat
 data class ProductEpoxyModel(
     private val uiProduct: UiProduct,
     private val onFavoriteIconClick: (Int) -> Unit,
+    private val onUiProductClick: (Int) -> Unit,
 ) : ViewBindingKotlinModel<EpoxyModelProductItemBinding>(R.layout.epoxy_model_product_item) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance()
@@ -25,6 +26,17 @@ data class ProductEpoxyModel(
         productCategoryTextView.text = uiProduct.product.category
         productDescriptionTextView.text = uiProduct.product.description
         productPriceTextView.text = currencyFormatter.format(uiProduct.product.price)
+        productDescriptionTextView.isVisible = uiProduct.isExpanded
+
+        val isFavorite = uiProduct.isFavorite
+
+        val imageRes = if (isFavorite) {
+            R.drawable.ic_round_favorite_24
+        } else {
+            R.drawable.ic_round_favorite_border_24
+        }
+
+        favoriteImageView.setIconResource(imageRes)
 
     }
 
@@ -43,9 +55,7 @@ data class ProductEpoxyModel(
     private fun EpoxyModelProductItemBinding.setupClickListeners() {
 
         cardView.setOnClickListener {
-            productDescriptionTextView.apply {
-                isVisible = !isVisible
-            }
+            onUiProductClick(uiProduct.product.id)
         }
 
         addToCartButton.setOnClickListener {
@@ -53,16 +63,6 @@ data class ProductEpoxyModel(
                 isVisible = !isVisible
             }
         }
-
-        val isFavorite = uiProduct.isFavorite
-
-        val imageRes = if (isFavorite) {
-            R.drawable.ic_round_favorite_24
-        } else {
-            R.drawable.ic_round_favorite_border_24
-        }
-
-        favoriteImageView.setIconResource(imageRes)
 
         favoriteImageView.setOnClickListener {
             onFavoriteIconClick(uiProduct.product.id)
