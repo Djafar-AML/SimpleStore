@@ -10,7 +10,6 @@ import com.example.simplestore.redux.state.ApplicationState
 import com.example.simplestore.redux.store.Store
 import com.example.simplestore.ui.fragments.home.repo.SharedRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
@@ -46,24 +45,41 @@ class HomeViewModel @Inject constructor(
             val productList = sharedRepo.productList()
 
             store.update { state ->
-                updateProductList(state, productList)
-            }
-
-            delay(5_000)
-
-            store.update { state ->
-                return@update state.copy(favoriteProductIds = setOf(1, 2, 4, 15, 16))
+                updateProductListState(state, productList)
             }
 
         }
 
     }
 
-    private fun updateProductList(
+    private fun updateProductListState(
         state: ApplicationState,
         productList: List<Product>
     ): ApplicationState {
         return state.copy(productList = productList)
+    }
+
+    fun updateFavoriteIcon(id: Int) {
+
+        viewModelScope.launch {
+            store.update { state ->
+                updateFavoriteProductsIdsState(state, id)
+            }
+        }
+
+    }
+
+    private fun updateFavoriteProductsIdsState(state: ApplicationState, id: Int): ApplicationState {
+
+        val currentFavoriteIds = state.favoriteProductIds
+
+        val newFavoriteIds = if (currentFavoriteIds.contains(id)) {
+            currentFavoriteIds.filter { it != id }.toSet()
+        } else {
+            currentFavoriteIds + setOf(id)
+        }
+
+        return state.copy(favoriteProductIds = newFavoriteIds)
     }
 
 }

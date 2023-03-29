@@ -5,15 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
 import com.example.simplestore.databinding.FragmentHomeBinding
-import com.example.simplestore.model.ui.UiProduct
 import com.example.simplestore.ui.fragments.base.BaseFragment
 import com.example.simplestore.ui.fragments.home.epoxy.controller.ProductEpoxyController
 import com.example.simplestore.ui.fragments.home.vm.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment() {
@@ -24,7 +20,7 @@ class HomeFragment : BaseFragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
-    private val productEpoxyController by lazy { ProductEpoxyController() }
+    private val productEpoxyController by lazy { ProductEpoxyController(::onFavoriteIconClick) }
 
     // endregion class leve variables
 
@@ -48,7 +44,6 @@ class HomeFragment : BaseFragment() {
         binding.epoxyRecyclerView.setController(productEpoxyController)
     }
 
-
     private fun setupObservers() {
 
         viewModel.uiProductList.observe(viewLifecycleOwner) { uiProducts ->
@@ -59,6 +54,10 @@ class HomeFragment : BaseFragment() {
 
     private fun initLoadingState() {
         productEpoxyController.setData(emptyList())
+    }
+
+    private fun onFavoriteIconClick(id: Int) {
+        viewModel.updateFavoriteIcon(id)
     }
 
 

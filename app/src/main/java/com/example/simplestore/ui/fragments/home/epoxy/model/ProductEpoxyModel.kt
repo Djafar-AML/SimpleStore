@@ -10,7 +10,8 @@ import com.example.simplestore.model.ui.UiProduct
 import java.text.NumberFormat
 
 data class ProductEpoxyModel(
-    private val uiProduct: UiProduct
+    private val uiProduct: UiProduct,
+    private val onFavoriteIconClick: (Int) -> Unit,
 ) : ViewBindingKotlinModel<EpoxyModelProductItemBinding>(R.layout.epoxy_model_product_item) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance()
@@ -62,6 +63,10 @@ data class ProductEpoxyModel(
         }
 
         favoriteImageView.setIconResource(imageRes)
+
+        favoriteImageView.setOnClickListener {
+            onFavoriteIconClick(uiProduct.product.id)
+        }
     }
 
 }
