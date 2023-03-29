@@ -10,4 +10,11 @@
         android:name="com.example.simplestore.ui.fragments.home.HomeFragment"
         android:label="Product list"
         tools:layout="@layout/fragment_home" />
+
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.example.simplestore.ui.fragments.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+
 </navigation>
