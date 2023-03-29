@@ -8,6 +8,6 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="com.example.simplestore.ui.fragments.home.HomeFragment"
-        android:label="fragment_home"
+        android:label="Product list"
         tools:layout="@layout/fragment_home" />
 </navigation>
