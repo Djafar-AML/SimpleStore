@@ -85,34 +85,48 @@ class ProductsListViewModel @Inject constructor(
 
             val productList = sharedRepo.productList()
 
+            val filters = productsFilters(productList)
+
             store.update { state ->
-                val newState =
-                    updateProductListState(state, productList)
-                updateProductFilterListState(newState, productList)
+                val newState = updateProductListState(state, productList, filters)
+                updateProductFilterListState(newState, filters)
             }
 
         }
 
     }
 
+    private fun productsFilters(products: List<Product>): Set<Filter> {
+
+        return products
+            .groupBy { it.category }
+            .map { mapEntry ->
+                Filter(
+                    value = mapEntry.key,
+                    displayText = "${mapEntry.key} (${mapEntry.value.size})"
+                )
+            }.toSet()
+
+    }
+
     private fun updateProductListState(
         state: ApplicationState,
-        productList: List<Product>
+        productList: List<Product>,
+        filters: Set<Filter>
     ): ApplicationState {
-        return state.copy(productList = productList)
+
+        return state.copy(
+            productList = productList,
+            productFilterInfo = ProductFilterInfo(filters = filters, selectedFilter = null)
+        )
     }
 
     private fun updateProductFilterListState(
         state: ApplicationState,
-        productList: List<Product>
+        filters: Set<Filter>,
     ): ApplicationState {
 
-        val productFilterInfo = ProductFilterInfo(
-            productList.map { Filter(value = it.category, displayText = it.category) }.toSet(),
-            selectedFilter = null
-        )
-
-        return state.copy(productFilterInfo = productFilterInfo)
+        return state.copy(productFilterInfo = ProductFilterInfo(filters))
     }
 
     fun updateFavoriteIcon(id: Int) {
