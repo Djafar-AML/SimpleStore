@@ -6,10 +6,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.simplestore.model.domain.Filter
 import com.example.simplestore.model.ui.ProductsListFragmentUi
-import com.example.simplestore.model.ui.UiFilter
-import com.example.simplestore.model.ui.UiProduct
 import com.example.simplestore.redux.state.ApplicationState
-import com.example.simplestore.redux.state.ProductFilterInfo
 import com.example.simplestore.redux.store.Store
 import com.example.simplestore.ui.fragments.productslistfragment.repo.SharedRepo
 import com.example.simplestore.ui.fragments.productslistfragment.vm.util.FilterGenerator
@@ -51,33 +48,15 @@ class ProductsListViewModel @Inject constructor(
                 setOfIsExpandedIds
             )
 
-            val uiFilters = uiFilters(productFilterInfo)
+            val uiFilters = filterGenerator.uiFilters(productFilterInfo)
 
             val filteredProducts =
-                filterProductsInfo(uiProducts, productFilterInfo.selectedFilter)
+                filterGenerator.filterProductsInfo(uiProducts, productFilterInfo.selectedFilter)
 
             return@combine ProductsListFragmentUi.Success(uiFilters, filteredProducts)
 
         }.distinctUntilChanged().asLiveData()
 
-    }
-
-
-    private fun uiFilters(productFilterInfo: ProductFilterInfo) =
-        productFilterInfo.filters.map { filter ->
-            UiFilter(
-                filter = filter,
-                isSelected = productFilterInfo.selectedFilter?.equals(filter) == true
-            )
-        }.toSet()
-
-    private fun filterProductsInfo(
-        uiProducts: List<UiProduct>,
-        selectedFilter: Filter?
-    ) = if (selectedFilter == null) {
-        uiProducts
-    } else {
-        uiProducts.filter { it.product.category == selectedFilter.value }
     }
 
     init {
@@ -86,7 +65,7 @@ class ProductsListViewModel @Inject constructor(
 
             val productList = sharedRepo.productList()
 
-            val filters = filterGenerator.generateFrom(productList)
+            val filters = filterGenerator.filterProductsList(productList)
 
             store.update { state ->
                 val newState =
