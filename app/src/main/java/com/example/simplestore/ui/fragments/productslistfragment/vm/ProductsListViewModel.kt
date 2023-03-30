@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.simplestore.model.domain.Filter
-import com.example.simplestore.model.domain.Product
 import com.example.simplestore.model.ui.ProductsListFragmentUi
 import com.example.simplestore.model.ui.UiFilter
 import com.example.simplestore.model.ui.UiProduct
@@ -14,6 +13,7 @@ import com.example.simplestore.redux.state.ProductFilterInfo
 import com.example.simplestore.redux.store.Store
 import com.example.simplestore.ui.fragments.productslistfragment.repo.SharedRepo
 import com.example.simplestore.ui.fragments.productslistfragment.vm.util.FilterGenerator
+import com.example.simplestore.ui.fragments.productslistfragment.vm.util.ProductsListStateUpdater
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -26,6 +26,7 @@ class ProductsListViewModel @Inject constructor(
     private val store: Store<ApplicationState>,
     private val sharedRepo: SharedRepo,
     private val filterGenerator: FilterGenerator,
+    private val productsListStateUpdater: ProductsListStateUpdater,
 ) : ViewModel() {
 
     val uiProductList = uiProductListLiveData()
@@ -44,7 +45,11 @@ class ProductsListViewModel @Inject constructor(
                 return@combine ProductsListFragmentUi.Loading
             }
 
-            val uiProducts = uiProducts(listOfProducts, setOfFavoriteIds, setOfIsExpandedIds)
+            val uiProducts = productsListStateUpdater.uiProducts(
+                listOfProducts,
+                setOfFavoriteIds,
+                setOfIsExpandedIds
+            )
 
             val uiFilters = uiFilters(productFilterInfo)
 
@@ -57,17 +62,6 @@ class ProductsListViewModel @Inject constructor(
 
     }
 
-    private fun uiProducts(
-        listOfProducts: List<Product>,
-        setOfFavoriteIds: Set<Int>,
-        setOfIsExpandedIds: Set<Int>
-    ) = listOfProducts.map { product ->
-        UiProduct(
-            product = product,
-            isFavorite = setOfFavoriteIds.contains(product.id),
-            isExpanded = setOfIsExpandedIds.contains(product.id)
-        )
-    }
 
     private fun uiFilters(productFilterInfo: ProductFilterInfo) =
         productFilterInfo.filters.map { filter ->
@@ -95,78 +89,32 @@ class ProductsListViewModel @Inject constructor(
             val filters = filterGenerator.generateFrom(productList)
 
             store.update { state ->
-                val newState = updateProductListState(state, productList, filters)
-                updateProductFilterListState(newState, filters)
+                val newState =
+                    productsListStateUpdater.updateProductListState(state, productList, filters)
+                productsListStateUpdater.updateProductFilterListState(newState, filters)
             }
 
         }
 
-    }
-
-    private fun updateProductListState(
-        state: ApplicationState,
-        productList: List<Product>,
-        filters: Set<Filter>
-    ): ApplicationState {
-
-        return state.copy(
-            productList = productList,
-            productFilterInfo = ProductFilterInfo(filters = filters, selectedFilter = null)
-        )
-    }
-
-    private fun updateProductFilterListState(
-        state: ApplicationState,
-        filters: Set<Filter>,
-    ): ApplicationState {
-
-        return state.copy(productFilterInfo = ProductFilterInfo(filters))
     }
 
     fun updateFavoriteIcon(id: Int) {
 
         viewModelScope.launch {
             store.update { state ->
-                updateFavoriteProductsIdsState(state, id)
+                productsListStateUpdater.updateFavoriteProductsIdsState(state, id)
             }
         }
 
-    }
-
-    private fun updateFavoriteProductsIdsState(state: ApplicationState, id: Int): ApplicationState {
-
-        val currentFavoriteIds = state.favoriteProductIds
-
-        val newFavoriteIds = if (currentFavoriteIds.contains(id)) {
-            currentFavoriteIds.filter { it != id }.toSet()
-        } else {
-            currentFavoriteIds + setOf(id)
-        }
-
-        return state.copy(favoriteProductIds = newFavoriteIds)
     }
 
     fun updateIsExpanded(id: Int) {
 
         viewModelScope.launch {
             store.update { state ->
-                updateIsExpandedIdsState(state, id)
+                productsListStateUpdater.updateIsExpandedIdsState(state, id)
             }
         }
-
-    }
-
-    private fun updateIsExpandedIdsState(state: ApplicationState, id: Int): ApplicationState {
-
-        val currentIsExpandedIds = state.isExpandedProductIds
-
-        val newIsExpandedIds = if (currentIsExpandedIds.contains(id)) {
-            currentIsExpandedIds.filter { it != id }.toSet()
-        } else {
-            currentIsExpandedIds + setOf(id)
-        }
-
-        return state.copy(isExpandedProductIds = newIsExpandedIds)
 
     }
 
@@ -178,10 +126,10 @@ class ProductsListViewModel @Inject constructor(
 
                 val currentlySelectedFilter = stateSnapshot.productFilterInfo.selectedFilter
 
-                return@update stateSnapshot.copy(
-                    productFilterInfo = stateSnapshot.productFilterInfo.copy(
-                        selectedFilter = if (currentlySelectedFilter != filter) filter else null
-                    )
+                return@update productsListStateUpdater.updateProductFilterInfo(
+                    stateSnapshot,
+                    currentlySelectedFilter,
+                    filter
                 )
             }
         }
