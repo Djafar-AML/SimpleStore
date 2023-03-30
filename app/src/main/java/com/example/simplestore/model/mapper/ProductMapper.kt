@@ -1,5 +1,6 @@
 package com.example.simplestore.model.mapper
 
+import com.example.simplestore.extensions.capitalizeFirstChar
 import com.example.simplestore.model.domain.Product
 import com.example.simplestore.model.network.GetProductResponse
 import java.math.BigDecimal
@@ -17,7 +18,7 @@ object ProductMapper {
                 RoundingMode.HALF_UP
             ), // 0.128 --> 0.13
             getProductResponse.description,
-            getProductResponse.category,
+            getProductResponse.category.capitalizeFirstChar(),
             getProductResponse.image,
         )
 
