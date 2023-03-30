@@ -1,6 +1,7 @@
 package com.example.simplestore.ui.activity
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -10,12 +11,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.airbnb.epoxy.Carousel
 import com.example.simplestore.R
 import com.example.simplestore.databinding.ActivitySimpleStoreBinding
+import com.example.simplestore.ui.activity.vm.StoreActivityViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class SimpleStoreActivity : AppCompatActivity() {
 
     private val binding by lazy { ActivitySimpleStoreBinding.inflate(layoutInflater) }
+
+    private val storeActivityViewModel: StoreActivityViewModel by viewModels()
 
     val navController by lazy { navController() }
 
@@ -24,9 +28,22 @@ class SimpleStoreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        setupObservers()
         setupActionBarWithNavController(navController, appBarConfiguration)
         setupBottomNavigation()
         preventCarouselSnapping()
+    }
+
+    private fun setupObservers() {
+
+        storeActivityViewModel.inCartProductCountLiveData.observe(this) { numberOfProductsInCart ->
+
+            binding.bottomNavigationView.getOrCreateBadge(R.id.cartFragment).apply {
+                number = numberOfProductsInCart
+                isVisible = numberOfProductsInCart > 0
+            }
+
+        }
     }
 
     private fun navController(): NavController {
