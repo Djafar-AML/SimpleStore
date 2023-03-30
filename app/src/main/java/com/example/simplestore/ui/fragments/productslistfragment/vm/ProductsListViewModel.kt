@@ -126,7 +126,7 @@ class ProductsListViewModel @Inject constructor(
 
                 val currentlySelectedFilter = stateSnapshot.productFilterInfo.selectedFilter
 
-                return@update productsListStateUpdater.updateProductFilterInfo(
+                productsListStateUpdater.updateProductFilterInfo(
                     stateSnapshot,
                     currentlySelectedFilter,
                     filter

@@ -47,7 +47,6 @@ class ProductEpoxyController(
             }
         }
 
-
     }
 
     private fun uiFilterEpoxyModels(uiFilters: Set<UiFilter>): List<EpoxyModel<View>> =
