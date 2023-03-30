@@ -1,6 +1,11 @@
 package com.example.simplestore.model.ui
 
-data class ProductsListFragmentUi(
-    val filters: Set<UiFilter>,
-    val products: List<UiProduct>
-)
+sealed class ProductsListFragmentUi {
+    data class Success(
+        val filters: Set<UiFilter>,
+        val products: List<UiProduct>
+    ) : ProductsListFragmentUi()
+
+    object Loading : ProductsListFragmentUi()
+
+}

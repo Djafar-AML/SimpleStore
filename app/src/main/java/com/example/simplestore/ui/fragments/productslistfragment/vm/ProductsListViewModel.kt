@@ -39,6 +39,11 @@ class ProductsListViewModel @Inject constructor(
             store.stateFlow.map { it.productFilterInfo },
         ) { listOfProducts, setOfFavoriteIds, setOfIsExpandedIds, productFilterInfo ->
 
+            if (listOfProducts.isEmpty()) {
+                ProductsListFragmentUi.Loading
+                return@combine ProductsListFragmentUi.Loading
+            }
+
             val uiProducts = uiProducts(listOfProducts, setOfFavoriteIds, setOfIsExpandedIds)
 
             val uiFilters = uiFilters(productFilterInfo)
@@ -46,7 +51,7 @@ class ProductsListViewModel @Inject constructor(
             val filteredProducts =
                 filterProductsInfo(uiProducts, productFilterInfo.selectedFilter)
 
-            return@combine ProductsListFragmentUi(uiFilters, filteredProducts)
+            return@combine ProductsListFragmentUi.Success(uiFilters, filteredProducts)
 
         }.distinctUntilChanged().asLiveData()
 

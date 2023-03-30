@@ -10,7 +10,6 @@ import com.example.simplestore.model.ui.UiFilter
 import com.example.simplestore.ui.fragments.productslistfragment.epoxy.model.LoadingEpoxyModel
 import com.example.simplestore.ui.fragments.productslistfragment.epoxy.model.ProductEpoxyModel
 import com.example.simplestore.ui.fragments.productslistfragment.epoxy.model.UiProductFilterEpoxyModel
-import java.util.*
 
 class ProductEpoxyController(
     private val onFavoriteIconClick: (Int) -> Unit,
@@ -20,22 +19,34 @@ class ProductEpoxyController(
 
     override fun buildModels(data: ProductsListFragmentUi?) {
 
-        if (data == null) {
-            LoadingEpoxyModel().id("loading_${UUID.randomUUID()}").addTo(this)
-            return
+        when (data) {
+
+            is ProductsListFragmentUi.Loading -> {
+                LoadingEpoxyModel().id("loading").addTo(this)
+                return
+            }
+
+            is ProductsListFragmentUi.Success -> {
+
+                val uiFilteredModels = uiFilterEpoxyModels(data.filters)
+
+                CarouselModel_().models(uiFilteredModels).id("filters").addTo(this)
+
+                data.products.forEach { uiProduct ->
+                    ProductEpoxyModel(
+                        uiProduct,
+                        onFavoriteIconClick,
+                        onUiProductClick
+                    ).id(uiProduct.product.id).addTo(this)
+                }
+
+            }
+
+            else -> {
+                throw RuntimeException("data is ${data?.javaClass?.simpleName}")
+            }
         }
 
-        val uiFilteredModels = uiFilterEpoxyModels(data.filters)
-
-        CarouselModel_().models(uiFilteredModels).id("filters").addTo(this)
-
-        data.products.forEach { uiProduct ->
-            ProductEpoxyModel(
-                uiProduct,
-                onFavoriteIconClick,
-                onUiProductClick
-            ).id(uiProduct.product.id).addTo(this)
-        }
 
     }
 

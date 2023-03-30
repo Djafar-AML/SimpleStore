@@ -44,7 +44,6 @@ class ProductsListFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         setupObservers()
-        initLoadingState()
     }
 
     private fun initViews() {
@@ -57,11 +56,6 @@ class ProductsListFragment : BaseFragment() {
             productEpoxyController.setData(uiProducts)
         }
 
-    }
-
-    private fun initLoadingState() {
-//        productEpoxyController.setData(null)
-        // todo
     }
 
     private fun onFavoriteIconClick(id: Int) {
