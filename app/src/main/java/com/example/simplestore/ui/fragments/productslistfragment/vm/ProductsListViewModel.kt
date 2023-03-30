@@ -13,6 +13,7 @@ import com.example.simplestore.redux.state.ApplicationState
 import com.example.simplestore.redux.state.ProductFilterInfo
 import com.example.simplestore.redux.store.Store
 import com.example.simplestore.ui.fragments.productslistfragment.repo.SharedRepo
+import com.example.simplestore.ui.fragments.productslistfragment.vm.util.FilterGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -23,7 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProductsListViewModel @Inject constructor(
     private val store: Store<ApplicationState>,
-    private val sharedRepo: SharedRepo
+    private val sharedRepo: SharedRepo,
+    private val filterGenerator: FilterGenerator,
 ) : ViewModel() {
 
     val uiProductList = uiProductListLiveData()
@@ -85,7 +87,7 @@ class ProductsListViewModel @Inject constructor(
 
             val productList = sharedRepo.productList()
 
-            val filters = productsFilters(productList)
+            val filters = filterGenerator.generateFrom(productList)
 
             store.update { state ->
                 val newState = updateProductListState(state, productList, filters)
@@ -93,19 +95,6 @@ class ProductsListViewModel @Inject constructor(
             }
 
         }
-
-    }
-
-    private fun productsFilters(products: List<Product>): Set<Filter> {
-
-        return products
-            .groupBy { it.category }
-            .map { mapEntry ->
-                Filter(
-                    value = mapEntry.key,
-                    displayText = "${mapEntry.key} (${mapEntry.value.size})"
-                )
-            }.toSet()
 
     }
 
