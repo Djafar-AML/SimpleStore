@@ -1,7 +1,7 @@
 package com.example.simplestore.hilt
 
 import com.example.simplestore.network.ApiClient
-import com.example.simplestore.ui.fragments.home.repo.SharedRepo
+import com.example.simplestore.ui.fragments.productslistfragment.repo.SharedRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.home.epoxy.model
+package com.example.simplestore.ui.fragments.productslistfragment.epoxy.model
 
 import com.example.simplestore.R
 import com.example.simplestore.databinding.EpoxyModelProductFilterBinding

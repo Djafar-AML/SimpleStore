@@ -35,7 +35,7 @@ class SimpleStoreActivity : AppCompatActivity() {
 
     private fun appBarConfigurationWithTopLevelDest() = AppBarConfiguration(
         topLevelDestinationIds = setOf(
-            R.id.homeFragment,
+            R.id.productsListFragment,
             R.id.profileFragment
         )
     )

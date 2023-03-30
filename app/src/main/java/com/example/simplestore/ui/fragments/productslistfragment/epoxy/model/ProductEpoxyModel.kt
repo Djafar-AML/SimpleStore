@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.home.epoxy.model
+package com.example.simplestore.ui.fragments.productslistfragment.epoxy.model
 
 import androidx.core.view.isGone
 import androidx.core.view.isVisible

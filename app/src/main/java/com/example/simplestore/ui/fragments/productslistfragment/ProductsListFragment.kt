@@ -1,25 +1,25 @@
-package com.example.simplestore.ui.fragments.home
+package com.example.simplestore.ui.fragments.productslistfragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
-import com.example.simplestore.databinding.FragmentHomeBinding
+import com.example.simplestore.databinding.FragmentProductsListBinding
 import com.example.simplestore.model.domain.Filter
 import com.example.simplestore.ui.fragments.base.BaseFragment
-import com.example.simplestore.ui.fragments.home.epoxy.controller.ProductEpoxyController
-import com.example.simplestore.ui.fragments.home.vm.HomeViewModel
+import com.example.simplestore.ui.fragments.productslistfragment.epoxy.controller.ProductEpoxyController
+import com.example.simplestore.ui.fragments.productslistfragment.vm.ProductsListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment() {
+class ProductsListFragment : BaseFragment() {
 
     // region class leve variables
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentProductsListBinding? = null
     private val binding by lazy { _binding!! }
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: ProductsListViewModel by viewModels()
 
     private val productEpoxyController by lazy {
         ProductEpoxyController(
@@ -35,7 +35,7 @@ class HomeFragment : BaseFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(layoutInflater)
+        _binding = FragmentProductsListBinding.inflate(layoutInflater)
         return binding.root
     }
     //endregion onCreateView

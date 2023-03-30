@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.home.vm
+package com.example.simplestore.ui.fragments.productslistfragment.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +12,7 @@ import com.example.simplestore.model.ui.UiProduct
 import com.example.simplestore.redux.state.ApplicationState
 import com.example.simplestore.redux.state.ProductFilterInfo
 import com.example.simplestore.redux.store.Store
-import com.example.simplestore.ui.fragments.home.repo.SharedRepo
+import com.example.simplestore.ui.fragments.productslistfragment.repo.SharedRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class ProductsListViewModel @Inject constructor(
     private val store: Store<ApplicationState>,
     private val sharedRepo: SharedRepo
 ) : ViewModel() {
@@ -176,9 +176,7 @@ class HomeViewModel @Inject constructor(
                     )
                 )
             }
-
         }
-
     }
 
 }

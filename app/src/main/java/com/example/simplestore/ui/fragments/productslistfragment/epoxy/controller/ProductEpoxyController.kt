@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.home.epoxy.controller
+package com.example.simplestore.ui.fragments.productslistfragment.epoxy.controller
 
 import android.view.View
 import com.airbnb.epoxy.CarouselModel_
@@ -7,9 +7,9 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.example.simplestore.model.domain.Filter
 import com.example.simplestore.model.ui.ProductsListFragmentUi
 import com.example.simplestore.model.ui.UiFilter
-import com.example.simplestore.ui.fragments.home.epoxy.model.LoadingEpoxyModel
-import com.example.simplestore.ui.fragments.home.epoxy.model.ProductEpoxyModel
-import com.example.simplestore.ui.fragments.home.epoxy.model.UiProductFilterEpoxyModel
+import com.example.simplestore.ui.fragments.productslistfragment.epoxy.model.LoadingEpoxyModel
+import com.example.simplestore.ui.fragments.productslistfragment.epoxy.model.ProductEpoxyModel
+import com.example.simplestore.ui.fragments.productslistfragment.epoxy.model.UiProductFilterEpoxyModel
 import java.util.*
 
 class ProductEpoxyController(

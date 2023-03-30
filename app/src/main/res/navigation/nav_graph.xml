@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph.xml"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/productsListFragment">
 
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.simplestore.ui.fragments.home.HomeFragment"
+        android:id="@+id/productsListFragment"
+        android:name="com.example.simplestore.ui.fragments.productslistfragment.ProductsListFragment"
         android:label="Product list"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_products_list" />
 
     <fragment
         android:id="@+id/profileFragment"
