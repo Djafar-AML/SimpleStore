@@ -7,6 +7,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import androidx.navigation.ui.setupActionBarWithNavController
+import com.airbnb.epoxy.Carousel
 import com.example.simplestore.R
 import com.example.simplestore.databinding.ActivitySimpleStoreBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -25,6 +26,7 @@ class SimpleStoreActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupActionBarWithNavController(navController, appBarConfiguration)
         setupBottomNavigation()
+        preventCarouselSnapping()
     }
 
     private fun navController(): NavController {
@@ -36,13 +38,18 @@ class SimpleStoreActivity : AppCompatActivity() {
     private fun appBarConfigurationWithTopLevelDest() = AppBarConfiguration(
         topLevelDestinationIds = setOf(
             R.id.productsListFragment,
-            R.id.profileFragment
+            R.id.profileFragment,
+            R.id.cartFragment
         )
     )
 
     private fun setupBottomNavigation() {
         val bottomNavigation = binding.bottomNavigationView
         setupWithNavController(bottomNavigation, navController)
+    }
+
+    private fun preventCarouselSnapping() {
+        Carousel.setDefaultGlobalSnapHelperFactory(null)
     }
 
 }
