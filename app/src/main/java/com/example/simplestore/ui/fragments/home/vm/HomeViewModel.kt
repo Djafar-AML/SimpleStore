@@ -4,9 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.simplestore.model.domain.Filter
 import com.example.simplestore.model.domain.Product
+import com.example.simplestore.model.ui.ProductsListFragmentUi
+import com.example.simplestore.model.ui.UiFilter
 import com.example.simplestore.model.ui.UiProduct
 import com.example.simplestore.redux.state.ApplicationState
+import com.example.simplestore.redux.state.ProductFilterInfo
 import com.example.simplestore.redux.store.Store
 import com.example.simplestore.ui.fragments.home.repo.SharedRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,25 +26,57 @@ class HomeViewModel @Inject constructor(
     private val sharedRepo: SharedRepo
 ) : ViewModel() {
 
-    val uiProductList: LiveData<List<UiProduct>> = uiProductListLiveData()
+    val uiProductList = uiProductListLiveData()
 
-    private fun uiProductListLiveData(): LiveData<List<UiProduct>> {
+    private fun uiProductListLiveData(): LiveData<ProductsListFragmentUi> {
 
         return combine(
             store.stateFlow.map { it.productList },
             store.stateFlow.map { it.favoriteProductIds },
             store.stateFlow.map { it.isExpandedProductIds },
-        ) { listOfProducts, setOfFavoriteIds, setOfIsExpandedIds ->
+            store.stateFlow.map { it.productFilterInfo },
+        ) { listOfProducts, setOfFavoriteIds, setOfIsExpandedIds, productFilterInfo ->
 
-            listOfProducts.map { product ->
-                UiProduct(
-                    product = product,
-                    isFavorite = setOfFavoriteIds.contains(product.id),
-                    isExpanded = setOfIsExpandedIds.contains(product.id)
-                )
-            }
+            val uiProducts = uiProducts(listOfProducts, setOfFavoriteIds, setOfIsExpandedIds)
+
+            val uiFilters = uiFilters(productFilterInfo)
+
+            val filteredProducts =
+                filterProductsInfo(uiProducts, productFilterInfo.selectedFilter)
+
+            return@combine ProductsListFragmentUi(uiFilters, filteredProducts)
+
         }.distinctUntilChanged().asLiveData()
 
+    }
+
+    private fun uiProducts(
+        listOfProducts: List<Product>,
+        setOfFavoriteIds: Set<Int>,
+        setOfIsExpandedIds: Set<Int>
+    ) = listOfProducts.map { product ->
+        UiProduct(
+            product = product,
+            isFavorite = setOfFavoriteIds.contains(product.id),
+            isExpanded = setOfIsExpandedIds.contains(product.id)
+        )
+    }
+
+    private fun uiFilters(productFilterInfo: ProductFilterInfo) =
+        productFilterInfo.filters.map { filter ->
+            UiFilter(
+                filter = filter,
+                isSelected = productFilterInfo.selectedFilter?.equals(filter) == true
+            )
+        }.toSet()
+
+    private fun filterProductsInfo(
+        uiProducts: List<UiProduct>,
+        selectedFilter: Filter?
+    ) = if (selectedFilter == null) {
+        uiProducts
+    } else {
+        uiProducts.filter { it.product.category == selectedFilter.value }
     }
 
     init {
@@ -50,7 +86,9 @@ class HomeViewModel @Inject constructor(
             val productList = sharedRepo.productList()
 
             store.update { state ->
-                updateProductListState(state, productList)
+                val newState =
+                    updateProductListState(state, productList)
+                updateProductFilterListState(newState, productList)
             }
 
         }
@@ -62,6 +100,19 @@ class HomeViewModel @Inject constructor(
         productList: List<Product>
     ): ApplicationState {
         return state.copy(productList = productList)
+    }
+
+    private fun updateProductFilterListState(
+        state: ApplicationState,
+        productList: List<Product>
+    ): ApplicationState {
+
+        val productFilterInfo = ProductFilterInfo(
+            productList.map { Filter(value = it.category, displayText = it.category) }.toSet(),
+            selectedFilter = null
+        )
+
+        return state.copy(productFilterInfo = productFilterInfo)
     }
 
     fun updateFavoriteIcon(id: Int) {
@@ -108,6 +159,25 @@ class HomeViewModel @Inject constructor(
         }
 
         return state.copy(isExpandedProductIds = newIsExpandedIds)
+
+    }
+
+    fun updateFilterSelection(filter: Filter) {
+
+        viewModelScope.launch {
+
+            store.update { stateSnapshot ->
+
+                val currentlySelectedFilter = stateSnapshot.productFilterInfo.selectedFilter
+
+                return@update stateSnapshot.copy(
+                    productFilterInfo = stateSnapshot.productFilterInfo.copy(
+                        selectedFilter = if (currentlySelectedFilter != filter) filter else null
+                    )
+                )
+            }
+
+        }
 
     }
 

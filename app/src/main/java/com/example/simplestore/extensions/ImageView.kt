@@ -1,6 +1,8 @@
 package com.example.simplestore.extensions
 
+import android.view.View
 import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import coil.load
 import coil.request.ImageRequest
 import coil.request.ImageResult
@@ -34,4 +36,8 @@ fun ImageView.loadByCoil(
         }
     }
 
+}
+
+fun ImageView.drawableRes(drawableIV: Int) {
+    this.setImageDrawable(ContextCompat.getDrawable(this.context, drawableIV))
 }
