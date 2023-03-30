@@ -15,6 +15,7 @@ class ProductEpoxyController(
     private val onFavoriteIconClick: (Int) -> Unit,
     private val onUiProductClick: (Int) -> Unit,
     private val onFilterSelect: (Filter) -> Unit,
+    private val onAddToCartClick: (Int) -> Unit,
 ) : TypedEpoxyController<ProductsListFragmentUi>() {
 
     override fun buildModels(data: ProductsListFragmentUi?) {
@@ -36,7 +37,8 @@ class ProductEpoxyController(
                     ProductEpoxyModel(
                         uiProduct,
                         onFavoriteIconClick,
-                        onUiProductClick
+                        onUiProductClick,
+                        onAddToCartClick,
                     ).id(uiProduct.product.id).addTo(this)
                 }
 

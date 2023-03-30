@@ -12,12 +12,14 @@ class ProductsListStateUpdater @Inject constructor() {
     fun uiProducts(
         listOfProducts: List<Product>,
         setOfFavoriteIds: Set<Int>,
-        setOfIsExpandedIds: Set<Int>
+        setOfIsExpandedIds: Set<Int>,
+        inCartProductIds: Set<Int>
     ) = listOfProducts.map { product ->
         UiProduct(
             product = product,
             isFavorite = setOfFavoriteIds.contains(product.id),
-            isExpanded = setOfIsExpandedIds.contains(product.id)
+            isExpanded = setOfIsExpandedIds.contains(product.id),
+            isInCart = inCartProductIds.contains(product.id),
         )
     }
 
@@ -70,12 +72,31 @@ class ProductsListStateUpdater @Inject constructor() {
 
     fun updateProductFilterInfo(
         stateSnapshot: ApplicationState,
-        currentlySelectedFilter: Filter?,
         filter: Filter
-    ) = stateSnapshot.copy(
-        productFilterInfo = stateSnapshot.productFilterInfo.copy(
-            selectedFilter = if (currentlySelectedFilter != filter) filter else null
+    ): ApplicationState {
+
+
+        val currentlySelectedFilter = stateSnapshot.productFilterInfo.selectedFilter
+
+        return stateSnapshot.copy(
+            productFilterInfo = stateSnapshot.productFilterInfo.copy(
+                selectedFilter = if (currentlySelectedFilter != filter) filter else null
+            )
         )
-    )
+    }
+
+    fun updateProductItemInCartIds(stateSnapshot: ApplicationState, id: Int): ApplicationState {
+
+        val currentProductIdsInCart = stateSnapshot.inCartProductIds
+
+        val newProductIdsInCart = if (currentProductIdsInCart.contains(id)) {
+            currentProductIdsInCart.filter { it != id }.toSet()
+        } else {
+            currentProductIdsInCart + setOf(id)
+        }
+
+        return stateSnapshot.copy(inCartProductIds = newProductIdsInCart)
+
+    }
 
 }

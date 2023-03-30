@@ -26,6 +26,7 @@ class ProductsListFragment : BaseFragment() {
             ::onFavoriteIconClick,
             ::onUiProductClick,
             ::onFilterSelect,
+            ::onAddToCartClick,
         )
     }
 
@@ -68,6 +69,10 @@ class ProductsListFragment : BaseFragment() {
 
     private fun onFilterSelect(filter: Filter) {
         viewModel.updateFilterSelection(filter)
+    }
+
+    private fun onAddToCartClick(id: Int) {
+        viewModel.updateOnAddToCart(id)
     }
 
 

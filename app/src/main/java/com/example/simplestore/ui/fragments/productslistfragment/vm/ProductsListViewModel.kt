@@ -35,7 +35,8 @@ class ProductsListViewModel @Inject constructor(
             store.stateFlow.map { it.favoriteProductIds },
             store.stateFlow.map { it.isExpandedProductIds },
             store.stateFlow.map { it.productFilterInfo },
-        ) { listOfProducts, setOfFavoriteIds, setOfIsExpandedIds, productFilterInfo ->
+            store.stateFlow.map { it.inCartProductIds },
+        ) { listOfProducts, setOfFavoriteIds, setOfIsExpandedIds, productFilterInfo, inCartProductIds ->
 
             if (listOfProducts.isEmpty()) {
                 ProductsListFragmentUi.Loading
@@ -45,7 +46,8 @@ class ProductsListViewModel @Inject constructor(
             val uiProducts = productsListStateUpdater.uiProducts(
                 listOfProducts,
                 setOfFavoriteIds,
-                setOfIsExpandedIds
+                setOfIsExpandedIds,
+                inCartProductIds,
             )
 
             val uiFilters = filterGenerator.uiFilters(productFilterInfo)
@@ -103,13 +105,19 @@ class ProductsListViewModel @Inject constructor(
 
             store.update { stateSnapshot ->
 
-                val currentlySelectedFilter = stateSnapshot.productFilterInfo.selectedFilter
+                productsListStateUpdater.updateProductFilterInfo(stateSnapshot, filter)
+            }
+        }
+    }
 
-                productsListStateUpdater.updateProductFilterInfo(
-                    stateSnapshot,
-                    currentlySelectedFilter,
-                    filter
-                )
+    fun updateOnAddToCart(id: Int) {
+
+        viewModelScope.launch {
+
+            store.update { stateSnapshot ->
+
+                productsListStateUpdater.updateProductItemInCartIds(stateSnapshot, id)
+
             }
         }
     }

@@ -13,31 +13,38 @@ data class ProductEpoxyModel(
     private val uiProduct: UiProduct,
     private val onFavoriteIconClick: (Int) -> Unit,
     private val onUiProductClick: (Int) -> Unit,
+    private val onAddToCartClick: (Int) -> Unit,
 ) : ViewBindingKotlinModel<EpoxyModelProductItemBinding>(R.layout.epoxy_model_product_item) {
 
     private val currencyFormatter = NumberFormat.getCurrencyInstance()
     override fun EpoxyModelProductItemBinding.bind() {
 
+        initViews()
+
         loadImage()
 
         setupClickListeners()
+
+    }
+
+    private fun EpoxyModelProductItemBinding.initViews() {
 
         productTitleTextView.text = uiProduct.product.title
         productCategoryTextView.text = uiProduct.product.category
         productDescriptionTextView.text = uiProduct.product.description
         productPriceTextView.text = currencyFormatter.format(uiProduct.product.price)
         productDescriptionTextView.isVisible = uiProduct.isExpanded
+        inCartView.isVisible = uiProduct.isInCart
 
-        val isFavorite = uiProduct.isFavorite
-
-        val imageRes = if (isFavorite) {
-            R.drawable.ic_round_favorite_24
-        } else {
-            R.drawable.ic_round_favorite_border_24
-        }
-
+        val imageRes = imageRes(uiProduct.isFavorite)
         favoriteImageView.setIconResource(imageRes)
 
+    }
+
+    private fun imageRes(isFavorite: Boolean) = if (isFavorite) {
+        R.drawable.ic_round_favorite_24
+    } else {
+        R.drawable.ic_round_favorite_border_24
     }
 
     private fun EpoxyModelProductItemBinding.loadImage() {
@@ -59,9 +66,7 @@ data class ProductEpoxyModel(
         }
 
         addToCartButton.setOnClickListener {
-            inCartView.apply {
-                isVisible = !isVisible
-            }
+            onAddToCartClick(uiProduct.product.id)
         }
 
         favoriteImageView.setOnClickListener {
