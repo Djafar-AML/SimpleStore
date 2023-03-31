@@ -19,7 +19,9 @@ data class UiProductFilterEpoxyModel(
         val backgroundColorResId = backgroundColor(uiFilter.isSelected)
         root.setCustomBackgroundColor(backgroundColorResId)
 
-        root.setOnClickListener { onFilterSelect(uiFilter.filter) }
+        root.setOnClickListener {
+            throw RuntimeException("Hi Firebase!")
+            onFilterSelect(uiFilter.filter) }
     }
 
     private fun backgroundColor(isSelected: Boolean): Int {

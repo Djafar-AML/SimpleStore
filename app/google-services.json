@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "293020973122",
+    "project_id": "simplestore-efdd9",
+    "storage_bucket": "simplestore-efdd9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:293020973122:android:53334514e88e05dd2755db",
+        "android_client_info": {
+          "package_name": "com.example.simplestore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "293020973122-515m5ov8527vnv6i4itqil8oeach7pp3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0o6GHbLou8WWuAA4amQ3iPYp6c7cdMyI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "293020973122-515m5ov8527vnv6i4itqil8oeach7pp3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
