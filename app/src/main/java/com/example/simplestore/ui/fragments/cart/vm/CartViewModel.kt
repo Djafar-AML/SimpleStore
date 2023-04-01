@@ -5,37 +5,37 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.simplestore.model.ui.CartFragmentUi
-import com.example.simplestore.redux.reduce.UiProductListReducer
+import com.example.simplestore.redux.reduce.UiProductInCartReducer
 import com.example.simplestore.redux.state.ApplicationState
 import com.example.simplestore.redux.store.Store
+import com.example.simplestore.redux.update.ItemQuantityCountUpdate
 import com.example.simplestore.redux.update.UiProductFavoriteUpdate
 import com.example.simplestore.redux.update.UiProductItemInCartUpdate
+import com.example.simplestore.ui.fragments.cart.vm.util.UiProductInCartGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CartViewModel @Inject constructor(
     private val store: Store<ApplicationState>,
-    private val uiProductListReducer: UiProductListReducer,
     private val productFavoriteUpdate: UiProductFavoriteUpdate,
     private val productItemInCartUpdate: UiProductItemInCartUpdate,
-    private val cartUiStateGenerator: CartUiStateGenerator,
+    private val uiProductInCartReducer: UiProductInCartReducer,
+    private val itemQuantityCountUpdate: ItemQuantityCountUpdate,
+    private val uiProductInCartGenerator: UiProductInCartGenerator,
 ) : ViewModel() {
-
 
     val uiCartProductListLiveData = uiCartProductListLiveData()
 
     private fun uiCartProductListLiveData(): LiveData<CartFragmentUi> {
 
-        return cartUiStateGenerator(productsInCartFlow()).distinctUntilChanged().asLiveData()
+        val uiProductInCartList = uiProductInCartReducer.reduce()
+
+        return uiProductInCartGenerator(uiProductInCartList).distinctUntilChanged().asLiveData()
+
     }
-
-    private fun productsInCartFlow() = uiProductListReducer.reduce(store)
-        .map { uiProducts -> uiProducts.filter { it.isInCart } }
-
 
     fun onFavoriteClick(id: Int) {
 
@@ -55,6 +55,17 @@ class CartViewModel @Inject constructor(
                 productItemInCartUpdate(appStateSnapshot, id)
             }
         }
+    }
+
+    fun onQuantityChange(id: Int, quantity: Int) {
+
+        viewModelScope.launch {
+
+            store.update { appStateSnapshot ->
+                itemQuantityCountUpdate(appStateSnapshot, id, quantity)
+            }
+        }
+
     }
 
 }

@@ -25,6 +25,7 @@ class CartFragment : BaseFragment() {
             ::onFavoriteClick,
             ::onDeleteClick,
             ::onEmptyStateClick,
+            ::onQuantityChange,
         )
     }
 
@@ -67,6 +68,10 @@ class CartFragment : BaseFragment() {
 
     private fun onEmptyStateClick() {
         storeActivity.navigateToTab(R.id.productsListFragment)
+    }
+
+    private fun onQuantityChange(id: Int, quantity: Int) {
+        viewModel.onQuantityChange(id, quantity)
     }
 
     override fun onDestroyView() {

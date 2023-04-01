@@ -5,7 +5,7 @@ import com.example.simplestore.epoxyutil.DividerEpoxyModel
 import com.example.simplestore.epoxyutil.VerticalSpaceEpoxyModel
 import com.example.simplestore.extensions.toPx
 import com.example.simplestore.model.ui.CartFragmentUi
-import com.example.simplestore.model.ui.UiProduct
+import com.example.simplestore.model.ui.UiProductInCart
 import com.example.simplestore.ui.fragments.cart.epoxy.model.CartEmptyEpoxyModel
 import com.example.simplestore.ui.fragments.cart.epoxy.model.CartItemEpoxyModel
 
@@ -13,6 +13,7 @@ class CartEpoxyController(
     private val onFavoriteClick: (Int) -> Unit,
     private val onDeleteClick: (Int) -> Unit,
     private val onEmptyStateClick: () -> Unit,
+    private val onQuantityChange: (Int, Int) -> Unit,
 ) : TypedEpoxyController<CartFragmentUi>() {
 
     override fun buildModels(data: CartFragmentUi?) {
@@ -24,9 +25,9 @@ class CartEpoxyController(
             }
             is CartFragmentUi.Data -> {
 
-                data.products.forEachIndexed { index, uiProduct ->
+                data.products.forEachIndexed { index, uiProductInCart ->
                     addVerticalStyling(index)
-                    addCartItemModel(uiProduct)
+                    addCartItemModel(uiProductInCart)
                 }
 
             }
@@ -51,13 +52,16 @@ class CartEpoxyController(
 
     }
 
-    private fun addCartItemModel(uiProduct: UiProduct) {
+    private fun addCartItemModel(uiProductInCart: UiProductInCart) {
+
         CartItemEpoxyModel(
-            uiProduct = uiProduct,
+            uiProductInCart = uiProductInCart,
             16.toPx(),
             onFavoriteClick = onFavoriteClick,
-            onDeleteClick = onDeleteClick
-        ).id(uiProduct.product.id).addTo(this)
+            onDeleteClick = onDeleteClick,
+            onQuantityChange = onQuantityChange
+        ).id(uiProductInCart.uiProduct.product.id).addTo(this)
+
     }
 
 }

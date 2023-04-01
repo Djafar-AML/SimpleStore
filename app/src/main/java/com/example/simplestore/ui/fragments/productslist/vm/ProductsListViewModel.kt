@@ -36,7 +36,7 @@ class ProductsListViewModel @Inject constructor(
     private fun uiProductListLiveData(): LiveData<ProductsListFragmentUi> {
 
         return uiProductListFragmentReducer
-            .reduce(store)
+            .reduce()
             .distinctUntilChanged()
             .asLiveData()
     }

@@ -10,13 +10,12 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UiProductListFragmentReducer @Inject constructor(
+    private val store: Store<ApplicationState>,
     private val uiProductListReducer: UiProductListReducer,
     private val productsListUiStateGenerator: ProductsListUiStateGenerator,
 ) {
 
-    fun reduce(
-        store: Store<ApplicationState>,
-    ): Flow<ProductsListFragmentUi> {
+    fun reduce(): Flow<ProductsListFragmentUi> {
 
         return combine(
             uiProductListReducer.reduce(store),
