@@ -2,6 +2,7 @@ package com.example.simplestore.ui.activity
 
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.annotation.IdRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
@@ -69,4 +70,7 @@ class SimpleStoreActivity : AppCompatActivity() {
         Carousel.setDefaultGlobalSnapHelperFactory(null)
     }
 
+    fun navigateToTab(@IdRes destination: Int) {
+        binding.bottomNavigationView.selectedItemId = destination
+    }
 }

@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.productslistfragment
+package com.example.simplestore.ui.fragments.productslist
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,8 +8,8 @@ import androidx.fragment.app.viewModels
 import com.example.simplestore.databinding.FragmentProductsListBinding
 import com.example.simplestore.model.domain.Filter
 import com.example.simplestore.ui.fragments.base.BaseFragment
-import com.example.simplestore.ui.fragments.productslistfragment.epoxy.controller.ProductEpoxyController
-import com.example.simplestore.ui.fragments.productslistfragment.vm.ProductsListViewModel
+import com.example.simplestore.ui.fragments.productslist.epoxy.controller.ProductEpoxyController
+import com.example.simplestore.ui.fragments.productslist.vm.ProductsListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

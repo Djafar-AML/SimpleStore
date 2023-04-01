@@ -3,7 +3,7 @@ package com.example.simplestore.redux.reduce
 import com.example.simplestore.model.ui.ProductsListFragmentUi
 import com.example.simplestore.redux.state.ApplicationState
 import com.example.simplestore.redux.store.Store
-import com.example.simplestore.ui.fragments.productslistfragment.vm.util.ProductsListUiStateGenerator
+import com.example.simplestore.ui.fragments.productslist.vm.util.ProductsListUiStateGenerator
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map

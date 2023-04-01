@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.productslistfragment.repo
+package com.example.simplestore.ui.fragments.productslist.repo
 
 import com.example.simplestore.model.domain.Product
 import com.example.simplestore.model.mapper.ProductMapper

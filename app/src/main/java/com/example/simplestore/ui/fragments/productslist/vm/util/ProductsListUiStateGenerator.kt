@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.productslistfragment.vm.util
+package com.example.simplestore.ui.fragments.productslist.vm.util
 
 import com.example.simplestore.model.ui.ProductsListFragmentUi
 import com.example.simplestore.model.ui.UiProduct

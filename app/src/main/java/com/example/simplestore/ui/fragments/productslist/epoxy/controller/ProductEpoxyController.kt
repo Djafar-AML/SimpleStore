@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.productslistfragment.epoxy.controller
+package com.example.simplestore.ui.fragments.productslist.epoxy.controller
 
 import android.view.View
 import com.airbnb.epoxy.CarouselModel_
@@ -7,9 +7,9 @@ import com.airbnb.epoxy.TypedEpoxyController
 import com.example.simplestore.model.domain.Filter
 import com.example.simplestore.model.ui.ProductsListFragmentUi
 import com.example.simplestore.model.ui.UiFilter
-import com.example.simplestore.ui.fragments.productslistfragment.epoxy.model.LoadingEpoxyModel
-import com.example.simplestore.ui.fragments.productslistfragment.epoxy.model.ProductEpoxyModel
-import com.example.simplestore.ui.fragments.productslistfragment.epoxy.model.UiProductFilterEpoxyModel
+import com.example.simplestore.ui.fragments.productslist.epoxy.model.LoadingEpoxyModel
+import com.example.simplestore.ui.fragments.productslist.epoxy.model.ProductEpoxyModel
+import com.example.simplestore.ui.fragments.productslist.epoxy.model.UiProductFilterEpoxyModel
 
 class ProductEpoxyController(
     private val onFavoriteIconClick: (Int) -> Unit,

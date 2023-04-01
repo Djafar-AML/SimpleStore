@@ -12,8 +12,8 @@ import com.example.simplestore.model.ui.UiProduct
 data class CartItemEpoxyModel(
     private val uiProduct: UiProduct,
     @Dimension(unit = Dimension.PX) private val horizontalMargin: Int,
-    private val onFavoriteClicked: () -> Unit,
-    private val onDeleteClicked: () -> Unit
+    private val onFavoriteClick: (Int) -> Unit,
+    private val onDeleteClick: (Int) -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelCartProductItemBinding>(R.layout.epoxy_model_cart_product_item) {
 
     override fun EpoxyModelCartProductItemBinding.bind() {
@@ -44,8 +44,8 @@ data class CartItemEpoxyModel(
 
     private fun EpoxyModelCartProductItemBinding.setupClickListeners() {
 
-        favoriteImageView.setOnClickListener { onFavoriteClicked() }
-        deleteIconImageView.setOnClickListener { onDeleteClicked() }
+        favoriteImageView.setOnClickListener { onFavoriteClick(uiProduct.product.id) }
+        deleteIconImageView.setOnClickListener { onDeleteClick(uiProduct.product.id) }
 
         quantityView.apply {
             minusImageView.setOnClickListener { }

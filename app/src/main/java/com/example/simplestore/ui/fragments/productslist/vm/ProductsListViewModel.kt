@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.productslistfragment.vm
+package com.example.simplestore.ui.fragments.productslist.vm
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -10,8 +10,8 @@ import com.example.simplestore.redux.reduce.UiProductListFragmentReducer
 import com.example.simplestore.redux.state.ApplicationState
 import com.example.simplestore.redux.store.Store
 import com.example.simplestore.redux.update.*
-import com.example.simplestore.ui.fragments.productslistfragment.repo.SharedRepo
-import com.example.simplestore.ui.fragments.productslistfragment.vm.util.ProductListFilterGenerator
+import com.example.simplestore.ui.fragments.productslist.repo.SharedRepo
+import com.example.simplestore.ui.fragments.productslist.vm.util.ProductListFilterGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch

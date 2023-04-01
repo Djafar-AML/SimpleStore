@@ -6,10 +6,10 @@ import com.example.simplestore.databinding.EpoxyModelCartEmptyBinding
 import com.example.simplestore.epxoybinding.ViewBindingKotlinModel
 
 data class CartEmptyEpoxyModel(
-    private val onClick: (View) -> Unit
+    private val onClick: () -> Unit
 ) : ViewBindingKotlinModel<EpoxyModelCartEmptyBinding>(R.layout.epoxy_model_cart_empty) {
 
     override fun EpoxyModelCartEmptyBinding.bind() {
-        button.setOnClickListener(onClick)
+        button.setOnClickListener{ onClick() }
     }
 }

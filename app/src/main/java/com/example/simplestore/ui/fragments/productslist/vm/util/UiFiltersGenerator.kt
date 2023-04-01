@@ -1,4 +1,4 @@
-package com.example.simplestore.ui.fragments.productslistfragment.vm.util
+package com.example.simplestore.ui.fragments.productslist.vm.util
 
 import com.example.simplestore.model.ui.UiFilter
 import com.example.simplestore.redux.state.ProductFilterInfo

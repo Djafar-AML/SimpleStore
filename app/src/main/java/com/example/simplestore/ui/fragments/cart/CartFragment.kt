@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.example.simplestore.R
 import com.example.simplestore.databinding.FragmentCartBinding
 import com.example.simplestore.ui.fragments.base.BaseFragment
 import com.example.simplestore.ui.fragments.cart.epoxy.controller.CartEpoxyController
@@ -20,7 +21,11 @@ class CartFragment : BaseFragment() {
     private val viewModel: CartViewModel by viewModels()
 
     private val cartEpoxyController by lazy {
-        CartEpoxyController()
+        CartEpoxyController(
+            ::onFavoriteClick,
+            ::onDeleteClick,
+            ::onEmptyStateClick,
+        )
     }
 
     override fun onCreateView(
@@ -49,6 +54,19 @@ class CartFragment : BaseFragment() {
             cartEpoxyController.setData(cartFragmentUi)
         }
 
+    }
+
+    private fun onFavoriteClick(id: Int) {
+        viewModel.onFavoriteClick(id)
+
+    }
+
+    private fun onDeleteClick(id: Int) {
+        viewModel.onDeleteClick(id)
+    }
+
+    private fun onEmptyStateClick() {
+        storeActivity.navigateToTab(R.id.productsListFragment)
     }
 
     override fun onDestroyView() {

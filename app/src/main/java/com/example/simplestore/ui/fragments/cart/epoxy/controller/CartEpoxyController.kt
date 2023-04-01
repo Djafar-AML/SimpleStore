@@ -9,7 +9,11 @@ import com.example.simplestore.model.ui.UiProduct
 import com.example.simplestore.ui.fragments.cart.epoxy.model.CartEmptyEpoxyModel
 import com.example.simplestore.ui.fragments.cart.epoxy.model.CartItemEpoxyModel
 
-class CartEpoxyController : TypedEpoxyController<CartFragmentUi>() {
+class CartEpoxyController(
+    private val onFavoriteClick: (Int) -> Unit,
+    private val onDeleteClick: (Int) -> Unit,
+    private val onEmptyStateClick: () -> Unit,
+) : TypedEpoxyController<CartFragmentUi>() {
 
     override fun buildModels(data: CartFragmentUi?) {
 
@@ -31,9 +35,7 @@ class CartEpoxyController : TypedEpoxyController<CartFragmentUi>() {
 
 
     private fun addEmptyModel() {
-        CartEmptyEpoxyModel(onClick = {
-            // todo
-        }).id("empty_state").addTo(this)
+        CartEmptyEpoxyModel(onEmptyStateClick).id("empty_state").addTo(this)
     }
 
     private fun addVerticalStyling(index: Int) {
@@ -53,12 +55,8 @@ class CartEpoxyController : TypedEpoxyController<CartFragmentUi>() {
         CartItemEpoxyModel(
             uiProduct = uiProduct,
             16.toPx(),
-            onFavoriteClicked = {
-                // todo
-            },
-            onDeleteClicked = {
-                // todo
-            }
+            onFavoriteClick = onFavoriteClick,
+            onDeleteClick = onDeleteClick
         ).id(uiProduct.product.id).addTo(this)
     }
 
