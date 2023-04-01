@@ -19,8 +19,8 @@ class UiProductInCartReducer @Inject constructor(
 
         return combine(
             productsInCartFlow(),
-            store.stateFlow.map { it.cartQuantitiesMap })
-        { uiProducts, quantityMap ->
+            store.stateFlow.map { it.cartQuantitiesMap }
+        ) { uiProducts, quantityMap ->
 
             uiProducts.map {
                 UiProductInCart(it, quantity = quantityMap[it.product.id] ?: 1)
