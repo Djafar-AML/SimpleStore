@@ -38,7 +38,7 @@ class CartEpoxyController : TypedEpoxyController<CartFragmentUi>() {
 
     private fun addVerticalStyling(index: Int) {
 
-        VerticalSpaceEpoxyModel(8.toPx()).id("space_$index").addTo(this)
+        VerticalSpaceEpoxyModel(8.toPx()).id("space_before_$index").addTo(this)
 
         if (index != 0) {
             DividerEpoxyModel(horizontalMargin = 16.toPx()).id("divider_$index")

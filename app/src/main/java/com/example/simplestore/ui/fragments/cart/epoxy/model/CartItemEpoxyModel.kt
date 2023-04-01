@@ -17,26 +17,49 @@ data class CartItemEpoxyModel(
 ) : ViewBindingKotlinModel<EpoxyModelCartProductItemBinding>(R.layout.epoxy_model_cart_product_item) {
 
     override fun EpoxyModelCartProductItemBinding.bind() {
-        // Setup our text
+
+        setupViews()
+        setupClickListeners()
+        updateLayoutParams()
+
+    }
+
+    private fun EpoxyModelCartProductItemBinding.setupViews() {
+
         productTitleTextView.text = uiProduct.product.title
 
-        // Favorite icon
-        val imageRes = if (uiProduct.isFavorite) {
-            R.drawable.ic_round_favorite_24
-        } else {
-            R.drawable.ic_round_favorite_border_24
-        }
-        favoriteImageView.setIconResource(imageRes)
-        favoriteImageView.setOnClickListener { onFavoriteClicked() }
+        productImageView.load(data = uiProduct.product.imageUrl)
 
+        favoriteImageView.setIconResource(imageRes())
+
+        quantityView.quantityTextView.text = 9.toString()
+
+    }
+
+    private fun imageRes() = if (uiProduct.isFavorite) {
+        R.drawable.ic_round_favorite_24
+    } else {
+        R.drawable.ic_round_favorite_border_24
+    }
+
+    private fun EpoxyModelCartProductItemBinding.setupClickListeners() {
+
+        favoriteImageView.setOnClickListener { onFavoriteClicked() }
         deleteIconImageView.setOnClickListener { onDeleteClicked() }
 
-        // Load our image
-        productImageView.load(data = uiProduct.product.imageUrl)
+        quantityView.apply {
+            minusImageView.setOnClickListener { }
+            plusImageView.setOnClickListener { }
+        }
+
+    }
+
+    private fun EpoxyModelCartProductItemBinding.updateLayoutParams() {
 
         root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             setMargins(horizontalMargin, 0, horizontalMargin, 0)
         }
 
     }
+
 }
