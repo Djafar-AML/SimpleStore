@@ -4,12 +4,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.example.simplestore.model.ui.CartFragmentUi
-import com.example.simplestore.model.ui.UiProduct
-import com.example.simplestore.redux.reducer.UiProductListReducer
+import com.example.simplestore.redux.reduce.UiProductListReducer
 import com.example.simplestore.redux.state.ApplicationState
 import com.example.simplestore.redux.store.Store
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

@@ -6,12 +6,12 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.simplestore.model.domain.Filter
 import com.example.simplestore.model.ui.ProductsListFragmentUi
-import com.example.simplestore.redux.reducer.UiProductListFragmentReducer
+import com.example.simplestore.redux.reduce.UiProductListFragmentReducer
 import com.example.simplestore.redux.state.ApplicationState
 import com.example.simplestore.redux.store.Store
+import com.example.simplestore.redux.update.*
 import com.example.simplestore.ui.fragments.productslistfragment.repo.SharedRepo
-import com.example.simplestore.ui.fragments.productslistfragment.vm.util.FilterGenerator
-import com.example.simplestore.ui.fragments.productslistfragment.vm.util.ProductsListStateUpdater
+import com.example.simplestore.ui.fragments.productslistfragment.vm.util.ProductListFilterGenerator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
@@ -21,9 +21,14 @@ import javax.inject.Inject
 class ProductsListViewModel @Inject constructor(
     private val store: Store<ApplicationState>,
     private val sharedRepo: SharedRepo,
-    private val filterGenerator: FilterGenerator,
-    private val productsListStateUpdater: ProductsListStateUpdater,
+    private val productListFilterGenerator: ProductListFilterGenerator,
     private val uiProductListFragmentReducer: UiProductListFragmentReducer,
+    private val productFavoriteUpdate: UiProductFavoriteUpdate,
+    private val productItemInCartUpdate: UiProductItemInCartUpdate,
+    private val productFilterUpdate: UiProductFilterUpdate,
+    private val productExpansionUpdate: UiProductExpansionUpdate,
+    private val productListUpdate: UiProductListUpdate,
+    private val productFilterListUpdate: UiProductFilterListUpdate,
 ) : ViewModel() {
 
     val uiProductList = uiProductListLiveData()
@@ -31,10 +36,9 @@ class ProductsListViewModel @Inject constructor(
     private fun uiProductListLiveData(): LiveData<ProductsListFragmentUi> {
 
         return uiProductListFragmentReducer
-            .reduce(store, filterGenerator)
+            .reduce(store)
             .distinctUntilChanged()
             .asLiveData()
-
     }
 
     init {
@@ -43,14 +47,12 @@ class ProductsListViewModel @Inject constructor(
 
             val productList = sharedRepo.productList()
 
-            val filters = filterGenerator.filterProductsList(productList)
+            val filters = productListFilterGenerator(productList)
 
             store.update { state ->
-                val newState =
-                    productsListStateUpdater.updateProductListState(state, productList, filters)
-                productsListStateUpdater.updateProductFilterListState(newState, filters)
+                val newState = productListUpdate(state, productList)
+                productFilterListUpdate(newState, filters)
             }
-
         }
 
     }
@@ -58,21 +60,21 @@ class ProductsListViewModel @Inject constructor(
     fun updateFavoriteIcon(id: Int) {
 
         viewModelScope.launch {
+
             store.update { state ->
-                productsListStateUpdater.updateFavoriteProductsIdsState(state, id)
+                productFavoriteUpdate(state, id)
             }
         }
-
     }
 
     fun updateIsExpanded(id: Int) {
 
         viewModelScope.launch {
+
             store.update { state ->
-                productsListStateUpdater.updateIsExpandedIdsState(state, id)
+                productExpansionUpdate(state, id)
             }
         }
-
     }
 
     fun updateFilterSelection(filter: Filter) {
@@ -80,8 +82,7 @@ class ProductsListViewModel @Inject constructor(
         viewModelScope.launch {
 
             store.update { stateSnapshot ->
-
-                productsListStateUpdater.updateProductFilterInfo(stateSnapshot, filter)
+                productFilterUpdate(stateSnapshot, filter)
             }
         }
     }
@@ -91,9 +92,7 @@ class ProductsListViewModel @Inject constructor(
         viewModelScope.launch {
 
             store.update { stateSnapshot ->
-
-                productsListStateUpdater.updateProductItemInCartIds(stateSnapshot, id)
-
+                productItemInCartUpdate(stateSnapshot, id)
             }
         }
     }

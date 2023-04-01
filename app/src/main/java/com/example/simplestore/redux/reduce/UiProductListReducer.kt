@@ -1,4 +1,4 @@
-package com.example.simplestore.redux.reducer
+package com.example.simplestore.redux.reduce
 
 import com.example.simplestore.model.ui.UiProduct
 import com.example.simplestore.redux.state.ApplicationState
