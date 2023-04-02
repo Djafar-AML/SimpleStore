@@ -8,6 +8,8 @@ import com.example.simplestore.R
 import com.example.simplestore.databinding.EpoxyModelCartProductItemBinding
 import com.example.simplestore.epxoybinding.ViewBindingKotlinModel
 import com.example.simplestore.model.ui.UiProductInCart
+import java.math.BigDecimal
+import java.text.NumberFormat
 
 data class CartItemEpoxyModel(
     val uiProductInCart: UiProductInCart,
@@ -16,6 +18,7 @@ data class CartItemEpoxyModel(
     private val onQuantityChange: (Int, Int) -> Unit,
 ) : ViewBindingKotlinModel<EpoxyModelCartProductItemBinding>(R.layout.epoxy_model_cart_product_item) {
 
+    private val currencyFormatter = NumberFormat.getCurrencyInstance()
     override fun EpoxyModelCartProductItemBinding.bind() {
 
         setupViews()
@@ -34,12 +37,18 @@ data class CartItemEpoxyModel(
 
         quantityView.quantityTextView.text = uiProductInCart.quantity.toString()
 
+        productTotalPriceTextView.text = currencyFormatter.format(totalPrice())
+
     }
 
     private fun imageRes() = if (uiProductInCart.uiProduct.isFavorite) {
         R.drawable.ic_round_favorite_24
     } else {
         R.drawable.ic_round_favorite_border_24
+    }
+
+    private fun totalPrice(): BigDecimal {
+        return uiProductInCart.uiProduct.product.price * BigDecimal(uiProductInCart.quantity)
     }
 
     private fun EpoxyModelCartProductItemBinding.setupClickListeners() {

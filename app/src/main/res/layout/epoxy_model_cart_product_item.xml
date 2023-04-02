@@ -47,6 +47,19 @@
         app:layout_constraintTop_toTopOf="@id/productImageView"
         tools:text="Fjallraven - Foldsack No. 1 Backpack, Fits 15 Laptops" />
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/productTotalPriceTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textColor="@color/purple_500"
+        android:textSize="16sp"
+        android:textStyle="normal"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="@id/quantityView"
+        tools:text="$109.95" />
 
     <include
         android:id="@+id/quantityView"
