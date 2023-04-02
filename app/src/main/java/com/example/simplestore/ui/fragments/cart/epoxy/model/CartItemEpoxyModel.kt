@@ -13,7 +13,6 @@ data class CartItemEpoxyModel(
     val uiProductInCart: UiProductInCart,
     @Dimension(unit = Dimension.PX) private val horizontalMargin: Int,
     private val onFavoriteClick: (Int) -> Unit,
-    private val onDeleteClick: (Int) -> Unit,
     private val onQuantityChange: (Int, Int) -> Unit,
 ) : ViewBindingKotlinModel<EpoxyModelCartProductItemBinding>(R.layout.epoxy_model_cart_product_item) {
 
@@ -48,7 +47,6 @@ data class CartItemEpoxyModel(
         val productId = uiProductInCart.uiProduct.product.id
 
         favoriteImageView.setOnClickListener { onFavoriteClick(productId) }
-        deleteIconImageView.setOnClickListener { onDeleteClick(productId) }
 
         quantityView.apply {
 

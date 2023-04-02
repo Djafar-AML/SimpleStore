@@ -26,7 +26,6 @@ class CartFragment : BaseFragment() {
     private val cartEpoxyController by lazy {
         CartEpoxyController(
             ::onFavoriteClick,
-            ::onDeleteClick,
             ::onEmptyStateClick,
             ::onQuantityChange,
         )

@@ -11,7 +11,6 @@ import com.example.simplestore.ui.fragments.cart.epoxy.model.CartItemEpoxyModel
 
 class CartEpoxyController(
     private val onFavoriteClick: (Int) -> Unit,
-    private val onDeleteClick: (Int) -> Unit,
     private val onEmptyStateClick: () -> Unit,
     private val onQuantityChange: (Int, Int) -> Unit,
 ) : TypedEpoxyController<CartFragmentUi>() {
@@ -58,7 +57,6 @@ class CartEpoxyController(
             uiProductInCart = uiProductInCart,
             16.toPx(),
             onFavoriteClick = onFavoriteClick,
-            onDeleteClick = onDeleteClick,
             onQuantityChange = onQuantityChange
         ).id(uiProductInCart.uiProduct.product.id).addTo(this)
 
