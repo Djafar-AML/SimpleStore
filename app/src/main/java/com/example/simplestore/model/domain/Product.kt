@@ -10,4 +10,10 @@ data class Product(
     val description: String = "",
     val category: String = "",
     val imageUrl: String = "",
-)
+    val rating: Rating = Rating(),
+) {
+    data class Rating(
+        val rateValue: Double = 0.0,
+        val numberOfRatings: Int = 0,
+    )
+}

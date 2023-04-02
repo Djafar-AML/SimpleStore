@@ -8,6 +8,7 @@ import com.example.simplestore.epxoybinding.ViewBindingKotlinModel
 import com.example.simplestore.extensions.loadByCoil
 import com.example.simplestore.model.ui.UiProduct
 import java.text.NumberFormat
+import kotlin.math.roundToInt
 
 data class ProductEpoxyModel(
     private val uiProduct: UiProduct,
@@ -38,6 +39,9 @@ data class ProductEpoxyModel(
 
         val imageRes = imageRes(uiProduct.isFavorite)
         favoriteImageView.setIconResource(imageRes)
+
+        ratingIndicator.progress = (uiProduct.product.rating.rateValue * 10).roundToInt()
+        ratingTextView.text = "${uiProduct.product.rating.rateValue}"
 
     }
 

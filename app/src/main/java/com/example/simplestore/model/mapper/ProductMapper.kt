@@ -20,6 +20,10 @@ object ProductMapper {
             getProductResponse.description,
             getProductResponse.category.capitalizeFirstChar(),
             getProductResponse.image,
+            rating = Product.Rating(
+                rateValue = getProductResponse.rating.rate,
+                numberOfRatings = getProductResponse.rating.count
+            )
         )
 
     }
