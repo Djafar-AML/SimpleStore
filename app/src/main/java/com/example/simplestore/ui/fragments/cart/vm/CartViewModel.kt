@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.simplestore.model.ui.CartFragmentUi
+import com.example.simplestore.model.ui.UiProductInCart
 import com.example.simplestore.redux.reduce.UiProductInCartReducer
 import com.example.simplestore.redux.state.ApplicationState
 import com.example.simplestore.redux.store.Store
@@ -27,14 +28,19 @@ class CartViewModel @Inject constructor(
     private val uiProductInCartGenerator: UiProductInCartGenerator,
 ) : ViewModel() {
 
+    val cartFragmentUi = cartFragmentUiLiveData()
     val uiCartProductListLiveData = uiCartProductListLiveData()
 
-    private fun uiCartProductListLiveData(): LiveData<CartFragmentUi> {
+    private fun cartFragmentUiLiveData(): LiveData<CartFragmentUi> {
 
         val uiProductInCartList = uiProductInCartReducer.reduce()
 
         return uiProductInCartGenerator(uiProductInCartList).distinctUntilChanged().asLiveData()
 
+    }
+
+    private fun uiCartProductListLiveData(): LiveData<List<UiProductInCart>> {
+        return uiProductInCartReducer.reduce().distinctUntilChanged().asLiveData()
     }
 
     fun onFavoriteClick(id: Int) {
