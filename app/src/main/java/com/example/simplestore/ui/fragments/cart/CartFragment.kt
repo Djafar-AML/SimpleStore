@@ -5,10 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import com.airbnb.epoxy.EpoxyTouchHelper
 import com.example.simplestore.R
 import com.example.simplestore.databinding.FragmentCartBinding
 import com.example.simplestore.ui.fragments.base.BaseFragment
 import com.example.simplestore.ui.fragments.cart.epoxy.controller.CartEpoxyController
+import com.example.simplestore.ui.fragments.cart.epoxy.model.CartItemEpoxyModel
+import com.example.simplestore.ui.fragments.cart.epoxy.swipecallback.CartItemSwipeCallback
 import com.example.simplestore.ui.fragments.cart.vm.CartViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,7 +45,7 @@ class CartFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         initViews()
         setupObservers()
-
+        setupEpoxyTouchHelper()
     }
 
     private fun initViews() {
@@ -57,9 +60,16 @@ class CartFragment : BaseFragment() {
 
     }
 
+    private fun setupEpoxyTouchHelper() {
+        EpoxyTouchHelper
+            .initSwiping(binding.epoxyRecyclerView)
+            .right()
+            .withTarget(CartItemEpoxyModel::class.java)
+            .andCallbacks(CartItemSwipeCallback(::onDeleteClick))
+    }
+
     private fun onFavoriteClick(id: Int) {
         viewModel.onFavoriteClick(id)
-
     }
 
     private fun onDeleteClick(id: Int) {

@@ -10,7 +10,7 @@ import com.example.simplestore.epxoybinding.ViewBindingKotlinModel
 import com.example.simplestore.model.ui.UiProductInCart
 
 data class CartItemEpoxyModel(
-    private val uiProductInCart: UiProductInCart,
+    val uiProductInCart: UiProductInCart,
     @Dimension(unit = Dimension.PX) private val horizontalMargin: Int,
     private val onFavoriteClick: (Int) -> Unit,
     private val onDeleteClick: (Int) -> Unit,
